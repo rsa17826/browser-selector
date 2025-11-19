@@ -1,0 +1,428 @@
+<style>
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    -ms-overflow-style: none;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+  #mainPage {
+    width: 100vw;
+    top: 32px;
+    position: absolute;
+    height: calc(100vh - 50px);
+    margin: 0 auto;
+  }
+  /*** Window Title ***/
+  header {
+    z-index: 20;
+    top: 2px;
+    left: 2px;
+    width: calc(100vw - 8px);
+    display: flex;
+    position: fixed;
+    background: #6f8180;
+    font-family: Segoe UI;
+    font-size: 9pt;
+    border: 2px solid transparent;
+    border-radius: 2em;
+    margin-bottom: 2px;
+  }
+
+  .title-bar {
+    padding: 0.35em 0.5em;
+    flex-grow: 1;
+  }
+  #title-bar-wrapper {
+    position: fixed;
+    z-index: 10;
+    background-color: #777;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    height: 30px;
+  }
+  .title-btn {
+    padding: 0.35em 1em;
+    cursor: pointer;
+    vertical-align: bottom;
+    font-family: Webdings;
+    font-size: 11pt;
+  }
+
+  body .title-btn-restore {
+    display: none;
+  }
+
+  body.neutron-maximized .title-btn-restore {
+    border-radius: 2em;
+    display: block;
+  }
+
+  body.neutron-maximized .title-btn-maximize {
+    display: none;
+  }
+
+  .title-btn:hover {
+    border-radius: 2em;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .title-btn-close:hover {
+    background: #dc3545;
+    border-radius: 2em;
+  }
+  /* .title-btn-close {
+    background: #858282;
+  } */
+</style>
+<style>
+  * {
+    color: black;
+  }
+  html {
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+    border: 0 !important;
+  }
+  .hidden {
+    display: none !important;
+  }
+  button,
+  input,
+  label {
+    margin: 0;
+    background-color: #777;
+    border: 1px solid black;
+  }
+  #saveoptions:nth-child(2n) > * {
+    background-color: #b9b9b9;
+  }
+  #saveoptions:nth-child(2n + 1) > * {
+    background-color: #777;
+  }
+  #saveoptions:nth-child(2n) > .good {
+    background-color: #06b300;
+  }
+  #saveoptions:nth-child(2n + 1) > .good {
+    background-color: #036800;
+  }
+  #saveoptions:nth-child(2n) > .bad {
+    background-color: #b30000;
+  }
+  #saveoptions:nth-child(2n + 1) > .bad {
+    background-color: #680000;
+  }
+  html {
+    padding: 2px;
+    margin: 0;
+    background-color: #777;
+    border: 2px solid black;
+  }
+  option {
+    color: #4b4b4b;
+    border: 2px solid #000000;
+  }
+  select {
+    color: #4b4b4b;
+    border: 1px solid black;
+    background-color: #bdbdbd;
+  }
+  .btn {
+    background: #4b4b4b;
+    color: rgb(214, 214, 214);
+    border: 5px solid rgb(94, 94, 94) !important;
+    width: calc(100vw - 4px) !important;
+  }
+</style>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<body>
+  <div id="title-bar-wrapper">
+    <header id="">
+      <span class="title-bar" onmousedown="neutron.DragTitleBar()"
+        >Browser Selector</span
+      >
+      <span class="title-btn" onclick="neutron.Minimize()">0</span>
+      <span
+        class="title-btn title-btn-maximize"
+        onclick="neutron.Maximize()"
+        >1</span
+      >
+      <span
+        class="title-btn title-btn-restore"
+        onclick="neutron.Maximize()"
+        >2</span
+      >
+      <span
+        class="title-btn title-btn-close"
+        onclick="neutron.Close()"
+        >r</span
+      >
+    </header>
+  </div>
+  <script>
+    function e(type, data, inside) {
+      if (!data) {
+        data = {}
+      }
+      if (!inside) {
+        inside = []
+      }
+      function createelem(elem, data) {
+        if (!data) {
+          data = {}
+        }
+        var type = elem
+        var elem = document.createElement(elem)
+        if (data["class"]) {
+          for (var e in data.class.split(" ")) {
+            e = data["class"].split(" ")[e]
+            elem.classList.add(e)
+          }
+        }
+        if (type == "label" && "for" in data) {
+          data.htmlFor = data.for
+        }
+        joinObjs([elem.style, data])
+        joinObjs([elem, data])
+        return elem
+      }
+      var parent = createelem(type, data)
+      if (data.options && type == "select") {
+        // alert(data.options)
+        data.options.forEach(function (e) {
+          var elem = createelem("option", {
+            innerHTML: e,
+          })
+          inside.push(elem)
+        })
+      }
+      for (elem in inside) {
+        elem = inside[elem]
+        try {
+          parent.appendChild(elem)
+        } catch (error) {
+          alert(error.message)
+          alert(Object.prototype.toString.call(parent))
+          alert(Object.prototype.toString.call(elem))
+        }
+      }
+      return parent
+    }
+    function joinObjs(objs) {
+      var tempobj = objs[0]
+      var a = 0
+      for (temp in objs) {
+        if (a == 0) {
+          a = 1
+          continue
+        }
+        temp = objs[temp]
+        for (var key in Object.keys(temp)) {
+          key = Object.keys(temp)[key]
+          // alert(key + " : " + JSON.stringify(objs) + " : " + temp[key])
+          tempobj[key] = temp[key]
+        }
+      }
+      return tempobj
+    }
+    function updateoptions(url, options) {
+      options = JSON.parse(options)
+      var allelems = document.querySelectorAll(
+        "#browserselector>#saveoptions"
+      )
+      var keys = Object.keys(options)
+      for (var i in keys) {
+        var key = keys[i]
+        var elem = document.getElementById("mainvalue " + key)
+        elem.placeholder = elem.value = options[key]
+      }
+      tryUpdateHidden()
+    }
+    function addoptions(url, options, us) {
+      if (window.usersettings) {
+        return
+      }
+      window.usersettings = JSON.parse(us)
+      if (usersettings.titleBar.indexOf("hidden") > -1) {
+        hideTitleBar()
+      }
+      if (usersettings.titleBar.indexOf("toggle") > -1) {
+        window.onkeydown = function (e) {
+          if (e.key == "Alt" && !e.ctrlKey && !e.shiftKey) {
+            ahk.AhkStopAlt()
+            e.preventDefault()
+            toggleTitleBar()
+          }
+        }
+      }
+      const types = [
+        "is",
+        "matchesregex",
+        "isexact",
+        "startswith",
+        "endswith",
+        "includes",
+      ]
+      document.querySelector("#browserselector").appendChild(
+        e("input", {
+          value: url,
+          type: "text",
+          id: "url",
+          width: "calc(100vw - 8px)",
+          marginBottom: "2px",
+          marginTop: "2px",
+          backgroundColor: "#999",
+          oninput: function () {
+            ahk.AhkUpdateShownUrl(this.value)
+          },
+        })
+      )
+      options = JSON.parse(options)
+
+      for (var i in Object.keys(options)) {
+        var key = Object.keys(options)[i]
+        var val = options[key]
+        var elem = e(
+          "div",
+          {
+            display: "flex",
+            flexDirection: "row",
+            width: "100vw",
+            id: "saveoptions",
+            // backgroundColor: i % 2 ? "#999" : "#777",
+          },
+          [
+            e("input", {
+              type: "checkbox",
+              id: key,
+              width: "5%",
+              border: "2px solid red",
+            }),
+            e("label", {
+              for: key,
+              width: "20%",
+              innerHTML: key,
+            }),
+            e("select", {
+              options: types,
+              width: "10%",
+              id: key,
+              onchange: function () {
+                this.parentElement.children[3].oninput()
+              },
+            }),
+            e("input", {
+              value: val,
+              placeholder: val,
+              id: "mainvalue " + key,
+              class: "good",
+              oninput: function () {
+                if (
+                  ahk.DoTheyMatch(
+                    this.placeholder,
+                    this.parentElement.children[2].value,
+                    this.value
+                  )
+                ) {
+                  this.classList.add("good")
+                  this.classList.remove("bad")
+                } else {
+                  this.classList.remove("good")
+                  this.classList.add("bad")
+                }
+              },
+              width: "calc(65% - 10px)",
+            }),
+          ]
+        )
+        document.querySelector("#browserselector").appendChild(elem)
+      }
+      tryUpdateHidden()
+    }
+    function tryUpdateHidden() {
+      if (!window.usersettings.hideEmptyProperties) {
+        return
+      }
+      var elems = document.querySelectorAll("#saveoptions")
+      for (let i = 0; i < elems.length; i++) {
+        if (elems[i].children[3].value == "") {
+          elems[i].style.display = "none"
+        } else {
+          elems[i].style.display = "flex"
+        }
+      }
+    }
+    window.addprogram = function (name) {
+      var a
+      var elem = e("div", {}, [
+        (a = e("button", {
+          id: "button",
+          innerHTML: name || "BLOCK URL",
+          value: name,
+          onclick: function (e) {
+            var a = document.querySelectorAll("#saveoptions")
+            var arr = []
+            var i = 0
+            while (i++ < a.length) {
+              var elem = a[i - 1]
+              var checked = elem.children[0].checked
+              var id = elem.children[1].innerHTML
+              var matchtype = elem.children[2].value
+              var value = elem.children[3].value
+              arr.push({
+                checked: checked,
+                id: id,
+                matchtype: matchtype,
+                value: value,
+              })
+            }
+            ahk.selectedprogram(
+              e,
+              document.querySelector("#url").value,
+              JSON.stringify(arr)
+            )
+          },
+          class: "btn",
+        })),
+      ])
+      document.querySelector("#browserselector").appendChild(elem)
+    }
+    onload = function () {
+      focus()
+    }
+    onblur = function () {
+      neutron.Close()
+    }
+    function hideTitleBar() {
+      document.querySelector("#title-bar-wrapper").style.display =
+        "none"
+      document.querySelector("#mainPage").style.top = "0"
+    }
+    oncontextmenu = function () {
+      showTitleBar()
+    }
+    function showTitleBar() {
+      document.querySelector("#title-bar-wrapper").style.display =
+        "block"
+      document.querySelector("#mainPage").style.top = "32px"
+    }
+    function toggleTitleBar() {
+      if (
+        document.querySelector("#title-bar-wrapper").style.display ==
+        "none"
+      )
+        showTitleBar()
+      else hideTitleBar()
+    }
+  </script>
+  <div id="mainPage">
+    <div id="browserselector"></div>
+  </div>
+</body>
