@@ -81,6 +81,12 @@ if getSetting(usersettings, "titleBar", 0)
 #SingleInstance off
 SELFTITLE := A_IsCompiled ? A_ScriptFullPath : A_ScriptFullPath " - AutoHotkey v" A_AhkVersion
 try parentpath := ProcessGetPath(ProcessGetParent(WinExist(SELFTITLE)))
+; try msgbox(parentpath, 1)
+if not IsSet(parentpath)
+  try parentpath := ProcessGetPath(ProcessGetParent(WinGetProcessName(WinExist(SELFTITLE))))
+if not IsSet(parentpath)
+  parentpath := ''
+; try msgbox(parentpath, 2)
 
 ; MsgBox(ProcessGetPath(WinGetProcessName(WinExist(SELFTITLE))))
 ; url := A_Args.has(1) ? A_Args[1] : "https://bloxd.asdasd/"
