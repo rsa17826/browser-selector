@@ -20,6 +20,8 @@ settings := JSON.parse(f.read(settingsFilePath, "
   "settings":{
     "closeOnFocusLoss": false,
     "defaultBrowser": "",
+    "closeOnEscPressed": true,
+    "closeOnEscPressedAnywhere": false,
     "hideEmptyProperties": true,
     "titleBar": "shown",
     "alwaysOnTop": true
@@ -65,13 +67,20 @@ getSetting(obj, key, default) {
 if ((!A_IsCompiled) || (!getSetting(usersettings, "closeOnFocusLoss", 1))) {
   win.wnd.onblur := ''
 }
+
+if getSetting(usersettings, "closeOnEscPressedAnywhere", 0) or getSetting(usersettings, "closeOnEscPressed", 1) {
+  Hotkey("~esc", (*) {
+    if WinActive("ahk_id " win.hwnd) or getSetting(usersettings, "closeOnEscPressedAnywhere", 0)
+      ExitApp()
+  })
+}
 if getSetting(usersettings, "titleBar", 0)
   parentpath := ''
 #Include <Neutron>
 #Include <OnMouseEvent>
 #SingleInstance off
 SELFTITLE := A_IsCompiled ? A_ScriptFullPath : A_ScriptFullPath " - AutoHotkey v" A_AhkVersion
-try parentpath := ProcessGetPath(ProcessGetParent(WinGetProcessName(WinExist(SELFTITLE))))
+try parentpath := ProcessGetPath(ProcessGetParent(WinExist(SELFTITLE)))
 
 ; MsgBox(ProcessGetPath(WinGetProcessName(WinExist(SELFTITLE))))
 ; url := A_Args.has(1) ? A_Args[1] : "https://bloxd.asdasd/"

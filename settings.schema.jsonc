@@ -77,6 +77,16 @@
           "default": true,
           "description": "sets the browser selector window to be always on top"
         },
+        "closeOnEscPressed": {
+          "type": "boolean",
+          "default": true,
+          "description": "if true while and the escape key is pressed the window will be closed"
+        },
+        "closeOnEscPressedAnywhere": {
+          "type": "boolean",
+          "default": false,
+          "description": "if true while and the escape key is pressed the window will be closed even if the window is not focused"
+        },
         "titleBar": {
           "enum": [
             "shown",
