@@ -156,7 +156,7 @@
                     "FileExt",
                     "FileName And Ext"
                   ],
-                  "description": " \nhttps://www.autohotkey.com/docs/v2/misc/WinTitle.htm#LastFoundWindow\nbrowserArgs = \ndrive = \nFileExt = \nfileName = \nFileName And Ext = \nfulldomain = www.autohotkey.com\nhash = #LastFoundWindow\nmaindomain = autohotkey.com\nmaindomainonly = autohotkey\nparentprocesspath = \npath = /docs/v2/misc/WinTitle.htm\nperams = \nport = \nprotocol = https\nsubdomain = www\ntld = com\nurl = https://www.autohotkey.com/docs/v2/misc/WinTitle.htm#LastFoundWindow"
+                  "description": " \nhttps://calamitymod.wiki.gg/wiki/Bladecrest_Oathsword\nbrowserArgs = \ndrive = \nFileExt = \nfileName = \nFileName And Ext = \nfulldomain = calamitymod.wiki.gg\nhash = \nmaindomain = wiki.gg\nmaindomainonly = wiki\nparentprocesspath = C:\\Windows\\explorer.exe\npath = /wiki/Bladecrest_Oathsword\nperams = \nport = \nprotocol = https\nsubdomain = calamitymod\ntld = gg\nurl = https://calamitymod.wiki.gg/wiki/Bladecrest_Oathsword"
                 },
                 {
                   "enum": [
@@ -167,11 +167,11 @@
                     "endswith",
                     "includes"
                   ],
-                  "description": " \nhttps://www.autohotkey.com/docs/v2/misc/WinTitle.htm#LastFoundWindow\nbrowserArgs = \ndrive = \nFileExt = \nfileName = \nFileName And Ext = \nfulldomain = www.autohotkey.com\nhash = #LastFoundWindow\nmaindomain = autohotkey.com\nmaindomainonly = autohotkey\nparentprocesspath = \npath = /docs/v2/misc/WinTitle.htm\nperams = \nport = \nprotocol = https\nsubdomain = www\ntld = com\nurl = https://www.autohotkey.com/docs/v2/misc/WinTitle.htm#LastFoundWindow"
+                  "description": " \nhttps://calamitymod.wiki.gg/wiki/Bladecrest_Oathsword\nbrowserArgs = \ndrive = \nFileExt = \nfileName = \nFileName And Ext = \nfulldomain = calamitymod.wiki.gg\nhash = \nmaindomain = wiki.gg\nmaindomainonly = wiki\nparentprocesspath = C:\\Windows\\explorer.exe\npath = /wiki/Bladecrest_Oathsword\nperams = \nport = \nprotocol = https\nsubdomain = calamitymod\ntld = gg\nurl = https://calamitymod.wiki.gg/wiki/Bladecrest_Oathsword"
                 },
                 {
                   "type": "string",
-                  "description": " \nhttps://www.autohotkey.com/docs/v2/misc/WinTitle.htm#LastFoundWindow\nbrowserArgs = \ndrive = \nFileExt = \nfileName = \nFileName And Ext = \nfulldomain = www.autohotkey.com\nhash = #LastFoundWindow\nmaindomain = autohotkey.com\nmaindomainonly = autohotkey\nparentprocesspath = \npath = /docs/v2/misc/WinTitle.htm\nperams = \nport = \nprotocol = https\nsubdomain = www\ntld = com\nurl = https://www.autohotkey.com/docs/v2/misc/WinTitle.htm#LastFoundWindow",
+                  "description": " \nhttps://calamitymod.wiki.gg/wiki/Bladecrest_Oathsword\nbrowserArgs = \ndrive = \nFileExt = \nfileName = \nFileName And Ext = \nfulldomain = calamitymod.wiki.gg\nhash = \nmaindomain = wiki.gg\nmaindomainonly = wiki\nparentprocesspath = C:\\Windows\\explorer.exe\npath = /wiki/Bladecrest_Oathsword\nperams = \nport = \nprotocol = https\nsubdomain = calamitymod\ntld = gg\nurl = https://calamitymod.wiki.gg/wiki/Bladecrest_Oathsword",
                   "default": "^https?://"
                 }
               ]

@@ -82,9 +82,9 @@ if getSetting(usersettings, "titleBar", 0)
 SELFTITLE := A_IsCompiled ? A_ScriptFullPath : A_ScriptFullPath " - AutoHotkey v" A_AhkVersion
 try parentpath := ProcessGetPath(ProcessGetParent(WinExist(SELFTITLE)))
 ; try msgbox(parentpath, 1)
-if not IsSet(parentpath)
+if not IsSet(parentpath) or not parentpath
   try parentpath := ProcessGetPath(ProcessGetParent(WinGetProcessName(WinExist(SELFTITLE))))
-if not IsSet(parentpath)
+if not IsSet(parentpath) or not parentpath
   parentpath := ''
 ; try msgbox(parentpath, 2)
 
