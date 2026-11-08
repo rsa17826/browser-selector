@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rules", "programs", "settings"],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "settings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultBrowser": {
+          "type": "string",
+          "default": "",
+          "description": "program to open every request with, blank to use rules and fall back to the picker"
+        },
+        "hideEmptyProperties": {
+          "type": "boolean",
+          "default": true,
+          "description": "hide url properties that are empty in the picker"
+        },
+        "closeOnFocusLoss": {
+          "type": "boolean",
+          "default": true,
+          "description": "close the picker when its window loses focus"
+        },
+        "closeOnEscPressed": {
+          "type": "boolean",
+          "default": true,
+          "description": "close the picker when escape is pressed in its window"
+        }
+      }
+    },
+    "programs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/program" }
+    },
+    "modifiers": {
+      "type": "object",
+      "description": "url rewriters a rule can list in its own \"modifiers\"",
+      "additionalProperties": { "$ref": "#/definitions/modifier" }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["matches", "name"],
+        "properties": {
+          "matches": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": [
+                {
+                  "enum": [
+                    "url", "protocol", "fulldomain", "tld", "subdomain",
+                    "maindomainonly", "maindomain", "parentprocesspath", "parentprocesscmdline", "path",
+                    "perams", "port", "hash", "fileName", "drive", "FileExt",
+                    "FileName And Ext"
+                  ]
+                },
+                {
+                  "enum": ["is", "matchesregex", "isexact", "startswith", "endswith", "includes"]
+                },
+                { "type": "string" }
+              ]
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "key inside programs to open with; leave blank to block the url"
+          },
+          "modifiers": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "keys inside modifiers, applied in order to the url before opening it"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "modifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "anyOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          ],
+          "description": "executable(s) to try in order, first one found is used"
+        },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "arguments before the url. The current url is always appended as the last argument and the program's stdout becomes the new url. No $variables are expanded here."
+        }
+      }
+    },
+    "program": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": {
+          "anyOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+          ],
+          "description": "executable(s) to try in order. Bare names are looked up in PATH, $VARS are expanded."
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "$url, $fulldomain, $path, $parentprocesspath etc. are replaced by the matching url property. An argument that is exactly $browserArgs expands to the extra command line arguments."
+          }
+        },
+        "visible": { "type": "boolean", "default": true },
+        "fallback": {
+          "type": "string",
+          "minLength": 1,
+          "description": "program to try if this one can't be found"
+        }
+      }
+    }
+  }
+}
